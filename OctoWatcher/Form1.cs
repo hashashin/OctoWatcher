@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Windows.Forms;
 using System.Net;
 using System.IO;
@@ -14,13 +15,17 @@ namespace OctoWatcher
     public partial class mainForm : Form
     {
         MyFileSystemWatcher fsWatcher = new MyFileSystemWatcher();
+
         string cfile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/octowatcher.ini";
 
-
+        private string lastName;
+        //private DateTime lasTime;
 
         public mainForm()
         {
             InitializeComponent();
+            icon.DoubleClick += notifyIcon1_MouseDoubleClick;
+            this.Resize += MainForm_Resize;
             IniFile config = new IniFile();
             if (File.Exists(cfile))
             {
@@ -30,16 +35,25 @@ namespace OctoWatcher
             else
             {
                 config["Default"]["watchFolder"] = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                config["Default"]["octoPrintAddress"] = "http://octopi.local";
+                config["Default"]["octoPrintAddress"] = "https://octoprint.local";
                 config["Default"]["apiKey"] = "Enter API Key";
                 config["Default"]["enableKeywords"] = "true";
                 config["Default"]["localUpload"] = "true";
                 config["Default"]["autoStart"] = "false";
+                config["Default"]["startMinimized"] = "false";
                 config.Save(cfile);
             }
             refreshProfileList();
-           
+
             loadSettings();
+            if (!startMinimized.Checked) return;
+            this.WindowState = FormWindowState.Minimized;
+            this.Hide();
+            this.ShowInTaskbar = false;
+            if (autoStart.Checked)
+            {
+                enableWatch.Checked = true;
+            }
         }
 
         private void refreshProfileList(string selectedProfile = "Default")
@@ -56,50 +70,128 @@ namespace OctoWatcher
             foreach (string name in sections)
             {
                 profileList.Items.Add(name);
-                if(name == selectedProfile)
+                if (name == selectedProfile)
                 {
                     profileList.SelectedIndex = index;
                 }
                 index++;
             }
-            
+
         }
 
         private void enableWatch_CheckedChanged(object sender, EventArgs e)
         {
             saveSettings();
-            if (enableWatch.Checked == true) {
+            if (enableWatch.Checked == true)
+            {
                 fsWatcher.Path = watchFolder.Text;
                 fsWatcher.Filter = "*.gco*"; // only watch for gcode
                 fsWatcher.NotifyFilter = NotifyFilters.LastWrite;
                 fsWatcher.Changed += new FileSystemEventHandler(OnChanged);
                 fsWatcher.EnableRaisingEvents = true;
                 statusLabel.Text = "Watching Folder for files.";
-            } else
+                enableWatch.Text = "Stop Watching";
+                start_stop.Text = enableWatch.Text;
+                icon.BalloonTipText = "Watching Folder for files.";
+                icon.ShowBalloonTip(100);
+            }
+            else
             {
                 fsWatcher.EnableRaisingEvents = false;
+                enableWatch.Text = "Start Watching";
+                start_stop.Text = enableWatch.Text;
                 statusLabel.Text = "Watching disabled.";
+                icon.BalloonTipText = "Watching disabled.";
+                icon.ShowBalloonTip(100);
             }
+        }
+
+        private void MainForm_Resize(object sender, EventArgs e)
+        {
+            if (FormWindowState.Minimized == this.WindowState)
+            {
+                icon.BalloonTipText = "Minimized to tray.";
+                icon.ShowBalloonTip(100);
+                this.Hide();
+            }
+        }
+
+        private void notifyIcon1_MouseDoubleClick(object sender, EventArgs e)
+        {
+            this.Show();
+            this.Visible = true;
+            this.WindowState = FormWindowState.Normal;
+        }
+
+        private void run_analysis(string arg)
+        {
+            Process p = new Process
+            {
+                StartInfo = new ProcessStartInfo(@"Q:\octoprint_post\analysis\venv\Scripts\analysis.exe",
+                    "--speed-x=1000 --speed-y=1000 --max-t=10 " + "\"" + arg + "\"")
+                {
+                    RedirectStandardOutput = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                }
+            };
+            p.Start();
+            //string output = p.StandardOutput.ReadToEnd();
+            p.WaitForExit();
+            var time = p.ExitTime.TimeOfDay.TotalSeconds - p.StartTime.TimeOfDay.TotalSeconds;
+            time = Math.Round(time, 0);
+            icon.BalloonTipText = $@"gcode processed in: {time}secs.";
+            icon.ShowBalloonTip(100);
+            statusLabel.Text = $@"gcode processed in: {time}secs.";
+        }
+
+        private void run_insert(string eFullPath)
+        {
+            Process p = new Process
+            {
+                StartInfo = new ProcessStartInfo(@"Q:\octoprint_post\analysis\venv\Scripts\python.exe",
+                    "Q:\\octoprint_post\\analysis\\insert_m117.py \"" + eFullPath + "\"")
+                {
+                    RedirectStandardOutput = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                }
+            };
+            p.Start();
+            //string output = p.StandardOutput.ReadToEnd();
+            p.WaitForExit();
         }
 
         private void OnChanged(object sender, FileSystemEventArgs e)
         {
-                fsWatcher.EnableRaisingEvents = false;
-                do_upload(e.FullPath);
-
+            if (lastName == e.Name || !File.Exists(e.FullPath) || lastName == "done")
+            {
+                lastName = lastName == "done" ? "" : e.Name;
+                return;
+            }
+            lastName = e.Name;
+            //fsWatcher.EnableRaisingEvents = false;
+            icon.BalloonTipText = "New file detected! Preprocessing: " + e.Name;
+            icon.ShowBalloonTip(100);
+            run_insert(e.FullPath);
+            run_analysis(e.FullPath);
+            //icon.BalloonTipText = "Uploading: " + e.Name;
+            //icon.ShowBalloonTip(100);
+            do_upload(e.FullPath);
+            File.Delete(e.FullPath);
+            lastName = "done";
         }
-
         private void do_upload(string filename)
         {
             System.Threading.Thread.Sleep(5000);
             NameValueCollection parameters = new NameValueCollection();
             string url = octoPrintAddress.Text + "/api/files/";
             string prepend = "http://";
-            if(octoPrintAddress.Text.StartsWith("http://"))
+            if (octoPrintAddress.Text.StartsWith("http://"))
             {
                 prepend = "";
             }
-            if(octoPrintAddress.Text.StartsWith("https://"))
+            if (octoPrintAddress.Text.StartsWith("https://"))
             {
                 prepend = "";
             }
@@ -114,14 +206,14 @@ namespace OctoWatcher
                 url = url + "sdcard";
             }
             // process filename here.
-            if(enableKeywords.Checked == true)
+            if (enableKeywords.Checked == true)
             {
-                if(uploadName.Contains("-select.gco"))
+                if (uploadName.Contains("-select.gco"))
                 {
                     parameters.Add("select", "true");
                     uploadName = uploadName.Replace("-select.gco", ".gco");
                     uploadedFileStatus += " as " + uploadName;
-                } 
+                }
                 if (uploadName.Contains("-print.gco"))
                 {
                     parameters.Add("print", "true");
@@ -137,7 +229,8 @@ namespace OctoWatcher
             UploadMultipart(File.ReadAllBytes(filename), uploadName, "application/octet-stream", prepend + url, apiKey.Text, parameters);
 
             statusLabel.Text = uploadedFileStatus;
-
+            icon.BalloonTipText = uploadedFileStatus;
+            icon.ShowBalloonTip(100);
         }
 
 
@@ -155,7 +248,7 @@ namespace OctoWatcher
 
             byte[] resp = webClient.UploadData(url, "POST", nfile);
             nfile = null;
-            fsWatcher.EnableRaisingEvents = true;
+            //fsWatcher.EnableRaisingEvents = true;
         }
 
         private void pickWatchFolder_Click(object sender, EventArgs e)
@@ -164,11 +257,11 @@ namespace OctoWatcher
             folderPicker.RootFolder = System.Environment.SpecialFolder.MyComputer;
 
             DialogResult result = folderPicker.ShowDialog();
-            if(result == DialogResult.OK)
+            if (result == DialogResult.OK)
             {
-                watchFolder.Text = folderPicker.SelectedPath; 
+                watchFolder.Text = folderPicker.SelectedPath;
             }
-        } 
+        }
 
         public void saveSettings()
         {
@@ -187,8 +280,9 @@ namespace OctoWatcher
                 config[profileName]["enableKeywords"] = enableKeywords.Checked.ToString();
                 config[profileName]["localUpload"] = localUpload.Checked.ToString();
                 config[profileName]["autoStart"] = autoStart.Checked.ToString();
+                config[profileName]["startMinimized"] = startMinimized.Checked.ToString();
                 config.Save(cfile);
-             
+
                 config = IniFile.FromFile(cfile);
             }
         }
@@ -202,7 +296,7 @@ namespace OctoWatcher
                 config = IniFile.FromFile(cfile);
             }
             string profileName = profileList.Text;
-            if(config[profileName]!= null)
+            if (config[profileName] != null)
             {
                 // it exists, load the profile
                 watchFolder.Text = config[profileName]["watchFolder"];
@@ -211,7 +305,9 @@ namespace OctoWatcher
                 enableKeywords.Checked = Convert.ToBoolean(config[profileName]["enableKeywords"]);
                 localUpload.Checked = Convert.ToBoolean(config[profileName]["localUpload"]);
                 autoStart.Checked = Convert.ToBoolean(config[profileName]["autoStart"]);
-            } else
+                startMinimized.Checked = Convert.ToBoolean(config[profileName]["startMinimized"]);
+            }
+            else
             {
                 // set to defaults
                 profileName = "Default";
@@ -221,8 +317,9 @@ namespace OctoWatcher
                 enableKeywords.Checked = Convert.ToBoolean(config[profileName]["enableKeywords"]);
                 localUpload.Checked = Convert.ToBoolean(config[profileName]["localUpload"]);
                 autoStart.Checked = Convert.ToBoolean(config[profileName]["autoStart"]);
+                startMinimized.Checked = Convert.ToBoolean(config[profileName]["startMinimized"]);
             }
-                 
+
         }
         private void mainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -262,7 +359,7 @@ namespace OctoWatcher
                 config = IniFile.FromFile(cfile);
             }
             string profileName = "New Profile";
-            if(InputBox("Profile Name","New Profile Name:",ref profileName) == DialogResult.OK)
+            if (InputBox("Profile Name", "New Profile Name:", ref profileName) == DialogResult.OK)
             {
                 // create a new profile with the name!
                 config[profileName]["watchFolder"] = watchFolder.Text;
@@ -318,9 +415,25 @@ namespace OctoWatcher
             value = textBox.Text;
             return dialogResult;
         }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            enableWatch.Checked = !enableWatch.Checked;
+        }
+
+        private void toolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            enableWatch.Checked = false;
+            this.Close();
+        }
+
+        private void toolStripMenuItem1_Click_1(object sender, EventArgs e)
+        {
+
+        }
     }
 
 
-    
+
 }
 

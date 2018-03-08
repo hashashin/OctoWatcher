@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(mainForm));
             this.folderPicker = new System.Windows.Forms.FolderBrowserDialog();
             this.label1 = new System.Windows.Forms.Label();
             this.watchFolder = new System.Windows.Forms.TextBox();
@@ -47,7 +49,14 @@
             this.deleteProfile = new System.Windows.Forms.Button();
             this.newProfile = new System.Windows.Forms.Button();
             this.profileList = new System.Windows.Forms.ComboBox();
+            this.icon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.menuicono = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.start_stop = new System.Windows.Forms.ToolStripMenuItem();
+            this.close = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.startMinimized = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
+            this.menuicono.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -222,6 +231,50 @@
             this.profileList.TabIndex = 12;
             this.profileList.SelectedIndexChanged += new System.EventHandler(this.profileList_SelectedIndexChanged);
             // 
+            // icon
+            // 
+            this.icon.ContextMenuStrip = this.menuicono;
+            this.icon.Icon = ((System.Drawing.Icon)(resources.GetObject("icon.Icon")));
+            this.icon.Text = "OctoWatcher";
+            this.icon.Visible = true;
+            // 
+            // menuicono
+            // 
+            this.menuicono.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.start_stop,
+            this.startMinimized,
+            this.toolStripSeparator1,
+            this.close});
+            this.menuicono.Name = "menuicono";
+            this.menuicono.Size = new System.Drawing.Size(175, 98);
+            // 
+            // start_stop
+            // 
+            this.start_stop.Name = "start_stop";
+            this.start_stop.Size = new System.Drawing.Size(174, 22);
+            this.start_stop.Text = this.enableWatch.Text;
+            this.start_stop.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
+            // 
+            // close
+            // 
+            this.close.Name = "close";
+            this.close.Size = new System.Drawing.Size(174, 22);
+            this.close.Text = "Close Octowatcher";
+            this.close.Click += new System.EventHandler(this.toolStripMenuItem2_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(171, 6);
+            // 
+            // startMinimized
+            // 
+            this.startMinimized.CheckOnClick = true;
+            this.startMinimized.Name = "startMinimized";
+            this.startMinimized.Size = new System.Drawing.Size(174, 22);
+            this.startMinimized.Text = "Start minimized";
+            this.startMinimized.Click += new System.EventHandler(this.toolStripMenuItem1_Click_1);
+            // 
             // mainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -244,12 +297,14 @@
             this.Controls.Add(this.pickWatchFolder);
             this.Controls.Add(this.watchFolder);
             this.Controls.Add(this.label1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "mainForm";
             this.RightToLeftLayout = true;
             this.Text = "OctoWatcher";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.mainForm_FormClosing);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.menuicono.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -276,6 +331,12 @@
         private System.Windows.Forms.Button deleteProfile;
         private System.Windows.Forms.Button newProfile;
         private System.Windows.Forms.ComboBox profileList;
+        private System.Windows.Forms.NotifyIcon icon;
+        private System.Windows.Forms.ContextMenuStrip menuicono;
+        private System.Windows.Forms.ToolStripMenuItem start_stop;
+        private System.Windows.Forms.ToolStripMenuItem close;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem startMinimized;
     }
 }
 
