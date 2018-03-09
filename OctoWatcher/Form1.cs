@@ -43,6 +43,7 @@ namespace OctoWatcher
                 config["Default"]["startMinimized"] = "false";
                 config.Save(cfile);
             }
+
             refreshProfileList();
 
             loadSettings();
@@ -64,6 +65,7 @@ namespace OctoWatcher
                 // it exists, let's load it.
                 config = IniFile.FromFile(cfile);
             }
+
             profileList.Items.Clear();
             int index = 0;
             string[] sections = config.GetSectionNames();
@@ -74,6 +76,7 @@ namespace OctoWatcher
                 {
                     profileList.SelectedIndex = index;
                 }
+
                 index++;
             }
 
@@ -88,6 +91,7 @@ namespace OctoWatcher
                 fsWatcher.Filter = "*.gco*"; // only watch for gcode
                 fsWatcher.NotifyFilter = NotifyFilters.LastWrite;
                 fsWatcher.Changed += new FileSystemEventHandler(OnChanged);
+                fsWatcher.IncludeSubdirectories = true;
                 fsWatcher.EnableRaisingEvents = true;
                 statusLabel.Text = "Watching Folder for files.";
                 enableWatch.Text = "Stop Watching";
@@ -169,6 +173,7 @@ namespace OctoWatcher
                 lastName = lastName == "done" ? "" : e.Name;
                 return;
             }
+
             lastName = e.Name;
             //fsWatcher.EnableRaisingEvents = false;
             icon.BalloonTipText = "New file detected! Preprocessing: " + e.Name;
@@ -181,6 +186,7 @@ namespace OctoWatcher
             File.Delete(e.FullPath);
             lastName = "done";
         }
+
         private void do_upload(string filename)
         {
             System.Threading.Thread.Sleep(5000);
@@ -191,10 +197,12 @@ namespace OctoWatcher
             {
                 prepend = "";
             }
+
             if (octoPrintAddress.Text.StartsWith("https://"))
             {
                 prepend = "";
             }
+
             string uploadName = Path.GetFileName(filename); // need to get just the filename portion
             string uploadedFileStatus = "Uploaded " + uploadName;
             if (localUpload.Checked == true)
@@ -205,6 +213,7 @@ namespace OctoWatcher
             {
                 url = url + "sdcard";
             }
+
             // process filename here.
             if (enableKeywords.Checked == true)
             {
@@ -214,6 +223,7 @@ namespace OctoWatcher
                     uploadName = uploadName.Replace("-select.gco", ".gco");
                     uploadedFileStatus += " as " + uploadName;
                 }
+
                 if (uploadName.Contains("-print.gco"))
                 {
                     parameters.Add("print", "true");
@@ -226,7 +236,9 @@ namespace OctoWatcher
                 parameters.Add("select", "false");
                 parameters.Add("print", "false");
             }
-            UploadMultipart(File.ReadAllBytes(filename), uploadName, "application/octet-stream", prepend + url, apiKey.Text, parameters);
+
+            UploadMultipart(File.ReadAllBytes(filename), uploadName, "application/octet-stream", prepend + url,
+                apiKey.Text, parameters);
 
             statusLabel.Text = uploadedFileStatus;
             icon.BalloonTipText = uploadedFileStatus;
@@ -234,7 +246,8 @@ namespace OctoWatcher
         }
 
 
-        public void UploadMultipart(byte[] file, string filename, string contentType, string url, string apiKey, NameValueCollection parameters)
+        public void UploadMultipart(byte[] file, string filename, string contentType, string url, string apiKey,
+            NameValueCollection parameters)
         {
             var webClient = new WebClient();
             string boundary = "------------------------" + DateTime.Now.Ticks.ToString("x");
@@ -242,7 +255,10 @@ namespace OctoWatcher
             webClient.Headers.Add("X-Api-Key", apiKey);
             webClient.QueryString = parameters;
             var fileData = webClient.Encoding.GetString(file);
-            var package = string.Format("--{0}\r\nContent-Disposition: form-data; name=\"file\"; filename=\"{1}\"\r\nContent-Type: {2}\r\n\r\n{3}\r\n--{0}--\r\n", boundary, filename, contentType, fileData);
+            var package =
+                string.Format(
+                    "--{0}\r\nContent-Disposition: form-data; name=\"file\"; filename=\"{1}\"\r\nContent-Type: {2}\r\n\r\n{3}\r\n--{0}--\r\n",
+                    boundary, filename, contentType, fileData);
 
             var nfile = webClient.Encoding.GetBytes(package);
 
@@ -271,6 +287,7 @@ namespace OctoWatcher
                 // it exists, let's load it.
                 config = IniFile.FromFile(cfile);
             }
+
             string profileName = profileList.Text;
             if (profileName != "")
             {
@@ -295,6 +312,7 @@ namespace OctoWatcher
                 // it exists, let's load it.
                 config = IniFile.FromFile(cfile);
             }
+
             string profileName = profileList.Text;
             if (config[profileName] != null)
             {
@@ -321,6 +339,7 @@ namespace OctoWatcher
             }
 
         }
+
         private void mainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             saveSettings();
@@ -339,6 +358,7 @@ namespace OctoWatcher
                 // it exists, let's load it.
                 config = IniFile.FromFile(cfile);
             }
+
             string profileToDelete = profileList.Text;
             config.DeleteSection(profileToDelete);
             config.Save(cfile);
@@ -358,6 +378,7 @@ namespace OctoWatcher
                 // it exists, let's load it.
                 config = IniFile.FromFile(cfile);
             }
+
             string profileName = "New Profile";
             if (InputBox("Profile Name", "New Profile Name:", ref profileName) == DialogResult.OK)
             {
@@ -432,8 +453,5 @@ namespace OctoWatcher
 
         }
     }
-
-
-
 }
 
