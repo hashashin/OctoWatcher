@@ -15,3 +15,8 @@ OctoWatcher will also remove the keyword from the filename upon upload, so "slic
 - Add Jog / Homing controls
 - Implement the App api, to do away with using the API key
 - Add Start/Stop controls for printing
+
+####
+# About this branch:
+
+I modded the program to also postprocess the gcode via python scripts, paths are hardcoded... 

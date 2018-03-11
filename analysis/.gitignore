@@ -1,0 +1,6 @@
+venv
+*.pyc
+analysis.egg-info
+bin
+dist
+.idea
