@@ -6,31 +6,30 @@ using System.Net;
 using System.IO;
 using Temp.IO;
 using Gajatko.IniFiles;
+using OctoWatcher.Properties;
 
 
 namespace OctoWatcher
 {
-
-
-    public partial class mainForm : Form
+    public partial class MainForm : Form
     {
-        MyFileSystemWatcher fsWatcher = new MyFileSystemWatcher();
+        private readonly MyFileSystemWatcher _fsWatcher = new MyFileSystemWatcher();
 
-        string cfile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/octowatcher.ini";
+        private readonly string _cfile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/octowatcher.ini";
 
-        private string lastName;
+        private string _lastName;
         //private DateTime lasTime;
 
-        public mainForm()
+        public MainForm()
         {
             InitializeComponent();
-            icon.DoubleClick += notifyIcon1_MouseDoubleClick;
-            this.Resize += MainForm_Resize;
+            icon.DoubleClick += NotifyIcon1_MouseDoubleClick;
+            Resize += MainForm_Resize;
             IniFile config = new IniFile();
-            if (File.Exists(cfile))
+            if (File.Exists(_cfile))
             {
                 // it exists, let's load it.
-                config = IniFile.FromFile(cfile);
+                IniFile.FromFile(_cfile);
             }
             else
             {
@@ -41,29 +40,29 @@ namespace OctoWatcher
                 config["Default"]["localUpload"] = "true";
                 config["Default"]["autoStart"] = "false";
                 config["Default"]["startMinimized"] = "false";
-                config.Save(cfile);
+                config.Save(_cfile);
             }
 
-            refreshProfileList();
+            RefreshProfileList();
 
-            loadSettings();
+            LoadSettings();
             if (!startMinimized.Checked) return;
-            this.WindowState = FormWindowState.Minimized;
-            this.Hide();
-            this.ShowInTaskbar = false;
+            WindowState = FormWindowState.Minimized;
+            Hide();
+            ShowInTaskbar = false;
             if (autoStart.Checked)
             {
                 enableWatch.Checked = true;
             }
         }
 
-        private void refreshProfileList(string selectedProfile = "Default")
+        private void RefreshProfileList(string selectedProfile = "Default")
         {
             IniFile config = new IniFile();
-            if (File.Exists(cfile))
+            if (File.Exists(_cfile))
             {
                 // it exists, let's load it.
-                config = IniFile.FromFile(cfile);
+                config = IniFile.FromFile(_cfile);
             }
 
             profileList.Items.Clear();
@@ -82,52 +81,50 @@ namespace OctoWatcher
 
         }
 
-        private void enableWatch_CheckedChanged(object sender, EventArgs e)
+        private void EnableWatch_CheckedChanged(object sender, EventArgs e)
         {
-            saveSettings();
-            if (enableWatch.Checked == true)
+            SaveSettings();
+            if (enableWatch.Checked)
             {
-                fsWatcher.Path = watchFolder.Text;
-                fsWatcher.Filter = "*.gco*"; // only watch for gcode
-                fsWatcher.NotifyFilter = NotifyFilters.LastWrite;
-                fsWatcher.Changed += new FileSystemEventHandler(OnChanged);
-                fsWatcher.IncludeSubdirectories = true;
-                fsWatcher.EnableRaisingEvents = true;
-                statusLabel.Text = "Watching Folder for files.";
-                enableWatch.Text = "Stop Watching";
+                _fsWatcher.Path = watchFolder.Text;
+                _fsWatcher.Filter = "*.gco*"; // only watch for gcode
+                _fsWatcher.NotifyFilter = NotifyFilters.LastWrite;
+                _fsWatcher.Changed += OnChanged;
+                _fsWatcher.IncludeSubdirectories = true;
+                _fsWatcher.EnableRaisingEvents = true;
+                statusLabel.Text = Resources.mainForm_enableWatch_CheckedChanged_Watching_Folder_for_files_;
+                enableWatch.Text = Resources.mainForm_enableWatch_CheckedChanged_Stop_Watching;
                 start_stop.Text = enableWatch.Text;
-                icon.BalloonTipText = "Watching Folder for files.";
-                icon.ShowBalloonTip(100);
+                icon.BalloonTipText = Resources.mainForm_enableWatch_CheckedChanged_Watching_Folder_for_files_;
+                icon.ShowBalloonTip(100, "", icon.BalloonTipText, ToolTipIcon.Info);
             }
             else
             {
-                fsWatcher.EnableRaisingEvents = false;
-                enableWatch.Text = "Start Watching";
+                _fsWatcher.EnableRaisingEvents = false;
+                enableWatch.Text = Resources.mainForm_enableWatch_CheckedChanged_Start_Watching;
                 start_stop.Text = enableWatch.Text;
-                statusLabel.Text = "Watching disabled.";
-                icon.BalloonTipText = "Watching disabled.";
-                icon.ShowBalloonTip(100);
+                statusLabel.Text = Resources.mainForm_enableWatch_CheckedChanged_Watching_disabled_;
+                icon.BalloonTipText = Resources.mainForm_enableWatch_CheckedChanged_Watching_disabled_;
+                icon.ShowBalloonTip(100,"", icon.BalloonTipText, ToolTipIcon.Info);
             }
         }
 
         private void MainForm_Resize(object sender, EventArgs e)
         {
-            if (FormWindowState.Minimized == this.WindowState)
-            {
-                icon.BalloonTipText = "Minimized to tray.";
-                icon.ShowBalloonTip(100);
-                this.Hide();
-            }
+            if (FormWindowState.Minimized != WindowState) return;
+            icon.BalloonTipText = Resources.mainForm_MainForm_Resize_Minimized_to_tray_;
+            icon.ShowBalloonTip(100, "", icon.BalloonTipText, ToolTipIcon.Info);
+            Hide();
         }
 
-        private void notifyIcon1_MouseDoubleClick(object sender, EventArgs e)
+        private void NotifyIcon1_MouseDoubleClick(object sender, EventArgs e)
         {
-            this.Show();
-            this.Visible = true;
-            this.WindowState = FormWindowState.Normal;
+            Show();
+            Visible = true;
+            WindowState = FormWindowState.Normal;
         }
 
-        private void run_analysis(string arg)
+        private void Run_analysis(string arg)
         {
             Process p = new Process
             {
@@ -145,11 +142,11 @@ namespace OctoWatcher
             var time = p.ExitTime.TimeOfDay.TotalSeconds - p.StartTime.TimeOfDay.TotalSeconds;
             time = Math.Round(time, 0);
             icon.BalloonTipText = $@"gcode processed in: {time}secs.";
-            icon.ShowBalloonTip(100);
+            icon.ShowBalloonTip(100, "", icon.BalloonTipText, ToolTipIcon.Info);
             statusLabel.Text = $@"gcode processed in: {time}secs.";
         }
 
-        private void run_insert(string eFullPath)
+        private void Run_insert(string eFullPath)
         {
             Process p = new Process
             {
@@ -168,26 +165,26 @@ namespace OctoWatcher
 
         private void OnChanged(object sender, FileSystemEventArgs e)
         {
-            if (lastName == e.Name || !File.Exists(e.FullPath) || lastName == "done")
+            if (_lastName == e.Name || !File.Exists(e.FullPath) || _lastName == "done")
             {
-                lastName = lastName == "done" ? "" : e.Name;
+                _lastName = _lastName == "done" ? "" : e.Name;
                 return;
             }
 
-            lastName = e.Name;
+            _lastName = e.Name;
             //fsWatcher.EnableRaisingEvents = false;
-            icon.BalloonTipText = "New file detected! Preprocessing: " + e.Name;
-            icon.ShowBalloonTip(100);
-            run_insert(e.FullPath);
-            run_analysis(e.FullPath);
+            icon.BalloonTipText = Resources.MainForm_OnChanged_New_file_detected__Preprocessing__ + e.Name;
+            icon.ShowBalloonTip(100, "", icon.BalloonTipText, ToolTipIcon.Info);
+            Run_insert(e.FullPath);
+            Run_analysis(e.FullPath);
             //icon.BalloonTipText = "Uploading: " + e.Name;
-            //icon.ShowBalloonTip(100);
-            do_upload(e.FullPath);
+            //icon.ShowBalloonTip(100, "", icon.BalloonTipText, ToolTipIcon.Info);
+            Do_upload(e.FullPath);
             File.Delete(e.FullPath);
-            lastName = "done";
+            _lastName = "done";
         }
 
-        private void do_upload(string filename)
+        private void Do_upload(string filename)
         {
             System.Threading.Thread.Sleep(5000);
             NameValueCollection parameters = new NameValueCollection();
@@ -205,7 +202,7 @@ namespace OctoWatcher
 
             string uploadName = Path.GetFileName(filename); // need to get just the filename portion
             string uploadedFileStatus = "Uploaded " + uploadName;
-            if (localUpload.Checked == true)
+            if (localUpload.Checked)
             {
                 url = url + "local";
             }
@@ -215,16 +212,16 @@ namespace OctoWatcher
             }
 
             // process filename here.
-            if (enableKeywords.Checked == true)
+            if (enableKeywords.Checked)
             {
-                if (uploadName.Contains("-select.gco"))
+                if (uploadName != null && uploadName.Contains("-select.gco"))
                 {
                     parameters.Add("select", "true");
                     uploadName = uploadName.Replace("-select.gco", ".gco");
                     uploadedFileStatus += " as " + uploadName;
                 }
 
-                if (uploadName.Contains("-print.gco"))
+                if (uploadName != null && uploadName.Contains("-print.gco"))
                 {
                     parameters.Add("print", "true");
                     uploadName = uploadName.Replace("-print.gco", ".gco");
@@ -242,17 +239,17 @@ namespace OctoWatcher
 
             statusLabel.Text = uploadedFileStatus;
             icon.BalloonTipText = uploadedFileStatus;
-            icon.ShowBalloonTip(100);
+            icon.ShowBalloonTip(100, "", icon.BalloonTipText, ToolTipIcon.Info);
         }
 
 
-        public void UploadMultipart(byte[] file, string filename, string contentType, string url, string apiKey,
+        private void UploadMultipart(byte[] file, string filename, string contentType, string url, string apikey,
             NameValueCollection parameters)
         {
             var webClient = new WebClient();
             string boundary = "------------------------" + DateTime.Now.Ticks.ToString("x");
             webClient.Headers.Add("Content-Type", "multipart/form-data; boundary=" + boundary);
-            webClient.Headers.Add("X-Api-Key", apiKey);
+            webClient.Headers.Add("X-Api-Key", apikey);
             webClient.QueryString = parameters;
             var fileData = webClient.Encoding.GetString(file);
             var package =
@@ -262,15 +259,14 @@ namespace OctoWatcher
 
             var nfile = webClient.Encoding.GetBytes(package);
 
-            byte[] resp = webClient.UploadData(url, "POST", nfile);
-            nfile = null;
+            webClient.UploadData(url, "POST", nfile);
             //fsWatcher.EnableRaisingEvents = true;
         }
 
-        private void pickWatchFolder_Click(object sender, EventArgs e)
+        private void PickWatchFolder_Click(object sender, EventArgs e)
         {
             folderPicker.ShowNewFolderButton = true; // they can make new folders, duh!
-            folderPicker.RootFolder = System.Environment.SpecialFolder.MyComputer;
+            folderPicker.RootFolder = Environment.SpecialFolder.MyComputer;
 
             DialogResult result = folderPicker.ShowDialog();
             if (result == DialogResult.OK)
@@ -279,13 +275,13 @@ namespace OctoWatcher
             }
         }
 
-        public void saveSettings()
+        private void SaveSettings()
         {
             IniFile config = new IniFile();
-            if (File.Exists(cfile))
+            if (File.Exists(_cfile))
             {
                 // it exists, let's load it.
-                config = IniFile.FromFile(cfile);
+                config = IniFile.FromFile(_cfile);
             }
 
             string profileName = profileList.Text;
@@ -298,19 +294,19 @@ namespace OctoWatcher
                 config[profileName]["localUpload"] = localUpload.Checked.ToString();
                 config[profileName]["autoStart"] = autoStart.Checked.ToString();
                 config[profileName]["startMinimized"] = startMinimized.Checked.ToString();
-                config.Save(cfile);
+                config.Save(_cfile);
 
-                config = IniFile.FromFile(cfile);
+                IniFile.FromFile(_cfile);
             }
         }
 
-        public void loadSettings()
+        private void LoadSettings()
         {
             IniFile config = new IniFile();
-            if (File.Exists(cfile))
+            if (File.Exists(_cfile))
             {
                 // it exists, let's load it.
-                config = IniFile.FromFile(cfile);
+                config = IniFile.FromFile(_cfile);
             }
 
             string profileName = profileList.Text;
@@ -340,62 +336,60 @@ namespace OctoWatcher
 
         }
 
-        private void mainForm_FormClosing(object sender, FormClosingEventArgs e)
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            saveSettings();
+            SaveSettings();
         }
 
-        private void saveProfile_Click(object sender, EventArgs e)
+        private void SaveProfile_Click(object sender, EventArgs e)
         {
-            saveSettings();
+            SaveSettings();
         }
 
-        private void deleteProfile_Click(object sender, EventArgs e)
+        private void DeleteProfile_Click(object sender, EventArgs e)
         {
             IniFile config = new IniFile();
-            if (File.Exists(cfile))
+            if (File.Exists(_cfile))
             {
                 // it exists, let's load it.
-                config = IniFile.FromFile(cfile);
+                config = IniFile.FromFile(_cfile);
             }
 
             string profileToDelete = profileList.Text;
             config.DeleteSection(profileToDelete);
-            config.Save(cfile);
-            refreshProfileList();
+            config.Save(_cfile);
+            RefreshProfileList();
         }
 
-        private void profileList_SelectedIndexChanged(object sender, EventArgs e)
+        private void ProfileList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            loadSettings();
+            LoadSettings();
         }
 
-        private void newProfile_Click(object sender, EventArgs e)
+        private void NewProfile_Click(object sender, EventArgs e)
         {
             IniFile config = new IniFile();
-            if (File.Exists(cfile))
+            if (File.Exists(_cfile))
             {
                 // it exists, let's load it.
-                config = IniFile.FromFile(cfile);
+                config = IniFile.FromFile(_cfile);
             }
 
             string profileName = "New Profile";
-            if (InputBox("Profile Name", "New Profile Name:", ref profileName) == DialogResult.OK)
-            {
-                // create a new profile with the name!
-                config[profileName]["watchFolder"] = watchFolder.Text;
-                config[profileName]["octoPrintAddress"] = octoPrintAddress.Text;
-                config[profileName]["apiKey"] = apiKey.Text;
-                config[profileName]["enableKeywords"] = enableKeywords.Checked.ToString();
-                config[profileName]["localUpload"] = localUpload.Checked.ToString();
-                config[profileName]["autoStart"] = autoStart.Checked.ToString();
-                config.Save(cfile);
-                config = IniFile.FromFile(cfile);
-                refreshProfileList(profileName);
-            }
+            if (InputBox("Profile Name", "New Profile Name:", ref profileName) != DialogResult.OK) return;
+            // create a new profile with the name!
+            config[profileName]["watchFolder"] = watchFolder.Text;
+            config[profileName]["octoPrintAddress"] = octoPrintAddress.Text;
+            config[profileName]["apiKey"] = apiKey.Text;
+            config[profileName]["enableKeywords"] = enableKeywords.Checked.ToString();
+            config[profileName]["localUpload"] = localUpload.Checked.ToString();
+            config[profileName]["autoStart"] = autoStart.Checked.ToString();
+            config.Save(_cfile);
+            IniFile.FromFile(_cfile);
+            RefreshProfileList(profileName);
         }
 
-        public static DialogResult InputBox(string title, string promptText, ref string value)
+        private static DialogResult InputBox(string title, string promptText, ref string value)
         {
             Form form = new Form();
             Label label = new Label();
@@ -407,8 +401,8 @@ namespace OctoWatcher
             label.Text = promptText;
             textBox.Text = value;
 
-            buttonOk.Text = "OK";
-            buttonCancel.Text = "Cancel";
+            buttonOk.Text = Resources.MainForm_InputBox_OK;
+            buttonCancel.Text = Resources.MainForm_InputBox_Cancel;
             buttonOk.DialogResult = DialogResult.OK;
             buttonCancel.DialogResult = DialogResult.Cancel;
 
@@ -437,18 +431,18 @@ namespace OctoWatcher
             return dialogResult;
         }
 
-        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        private void ToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             enableWatch.Checked = !enableWatch.Checked;
         }
 
-        private void toolStripMenuItem2_Click(object sender, EventArgs e)
+        private void ToolStripMenuItem2_Click(object sender, EventArgs e)
         {
             enableWatch.Checked = false;
-            this.Close();
+            Close();
         }
 
-        private void toolStripMenuItem1_Click_1(object sender, EventArgs e)
+        private void ToolStripMenuItem1_Click_1(object sender, EventArgs e)
         {
 
         }

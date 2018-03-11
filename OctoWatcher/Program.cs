@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using OctoWatcher.Properties;
 
 namespace OctoWatcher
 {
@@ -12,20 +10,20 @@ namespace OctoWatcher
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
-        static readonly Mutex mutex = new Mutex(true, "{94fb821b-d743-4ac8-a35a-a1b94b965471}");
+        private static readonly Mutex mutex = new Mutex(true, "{94fb821b-d743-4ac8-a35a-a1b94b965471}");
 
         [STAThread]
-        static void Main()
+        private static void Main()
         {
             if (mutex.WaitOne(TimeSpan.Zero, true))
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new mainForm());
+                Application.Run(new MainForm());
             }
             else
             {
-                MessageBox.Show("only one instance at a time");
+                MessageBox.Show(Resources.Program_Main_only_one_instance_at_a_time);
             }
         }
     }

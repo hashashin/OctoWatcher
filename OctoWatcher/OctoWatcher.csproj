@@ -75,6 +75,9 @@
   <PropertyGroup>
     <ApplicationIcon>octo.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>OctoWatcher.Program</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -143,6 +146,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="octo.ico" />
+    <None Include="Resources\tooltipicon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

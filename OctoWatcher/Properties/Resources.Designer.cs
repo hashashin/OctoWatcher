@@ -59,5 +59,96 @@ namespace OctoWatcher.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Start Watching.
+        /// </summary>
+        internal static string mainForm_enableWatch_CheckedChanged_Start_Watching {
+            get {
+                return ResourceManager.GetString("mainForm_enableWatch_CheckedChanged_Start_Watching", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Stop Watching.
+        /// </summary>
+        internal static string mainForm_enableWatch_CheckedChanged_Stop_Watching {
+            get {
+                return ResourceManager.GetString("mainForm_enableWatch_CheckedChanged_Stop_Watching", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Watching disabled..
+        /// </summary>
+        internal static string mainForm_enableWatch_CheckedChanged_Watching_disabled_ {
+            get {
+                return ResourceManager.GetString("mainForm_enableWatch_CheckedChanged_Watching_disabled_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Watching Folder for files..
+        /// </summary>
+        internal static string mainForm_enableWatch_CheckedChanged_Watching_Folder_for_files_ {
+            get {
+                return ResourceManager.GetString("mainForm_enableWatch_CheckedChanged_Watching_Folder_for_files_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Cancel.
+        /// </summary>
+        internal static string MainForm_InputBox_Cancel {
+            get {
+                return ResourceManager.GetString("MainForm_InputBox_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a OK.
+        /// </summary>
+        internal static string MainForm_InputBox_OK {
+            get {
+                return ResourceManager.GetString("MainForm_InputBox_OK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Minimized to tray..
+        /// </summary>
+        internal static string mainForm_MainForm_Resize_Minimized_to_tray_ {
+            get {
+                return ResourceManager.GetString("mainForm_MainForm_Resize_Minimized_to_tray_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a New file detected! Preprocessing: .
+        /// </summary>
+        internal static string MainForm_OnChanged_New_file_detected__Preprocessing__ {
+            get {
+                return ResourceManager.GetString("MainForm_OnChanged_New_file_detected__Preprocessing__", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Icon similar a (Icono).
+        /// </summary>
+        internal static System.Drawing.Icon octo {
+            get {
+                object obj = ResourceManager.GetObject("octo", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a only one instance at a time.
+        /// </summary>
+        internal static string Program_Main_only_one_instance_at_a_time {
+            get {
+                return ResourceManager.GetString("Program_Main_only_one_instance_at_a_time", resourceCulture);
+            }
+        }
     }
 }

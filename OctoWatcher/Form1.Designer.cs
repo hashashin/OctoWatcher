@@ -1,6 +1,6 @@
 ﻿namespace OctoWatcher
 {
-    partial class mainForm
+    partial class MainForm
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(mainForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.folderPicker = new System.Windows.Forms.FolderBrowserDialog();
             this.label1 = new System.Windows.Forms.Label();
             this.watchFolder = new System.Windows.Forms.TextBox();
@@ -84,7 +84,7 @@
             this.pickWatchFolder.TabIndex = 2;
             this.pickWatchFolder.Text = "...";
             this.pickWatchFolder.UseVisualStyleBackColor = true;
-            this.pickWatchFolder.Click += new System.EventHandler(this.pickWatchFolder_Click);
+            this.pickWatchFolder.Click += new System.EventHandler(this.PickWatchFolder_Click);
             // 
             // label2
             // 
@@ -154,7 +154,7 @@
             this.enableWatch.Text = "Start Watching";
             this.enableWatch.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.enableWatch.UseVisualStyleBackColor = true;
-            this.enableWatch.CheckedChanged += new System.EventHandler(this.enableWatch_CheckedChanged);
+            this.enableWatch.CheckedChanged += new System.EventHandler(this.EnableWatch_CheckedChanged);
             // 
             // autoStart
             // 
@@ -199,7 +199,7 @@
             this.saveProfile.TabIndex = 14;
             this.saveProfile.Text = "Save";
             this.saveProfile.UseVisualStyleBackColor = true;
-            this.saveProfile.Click += new System.EventHandler(this.saveProfile_Click);
+            this.saveProfile.Click += new System.EventHandler(this.SaveProfile_Click);
             // 
             // deleteProfile
             // 
@@ -209,7 +209,7 @@
             this.deleteProfile.TabIndex = 15;
             this.deleteProfile.Text = "Delete";
             this.deleteProfile.UseVisualStyleBackColor = true;
-            this.deleteProfile.Click += new System.EventHandler(this.deleteProfile_Click);
+            this.deleteProfile.Click += new System.EventHandler(this.DeleteProfile_Click);
             // 
             // newProfile
             // 
@@ -219,7 +219,7 @@
             this.newProfile.TabIndex = 16;
             this.newProfile.Text = "New";
             this.newProfile.UseVisualStyleBackColor = true;
-            this.newProfile.Click += new System.EventHandler(this.newProfile_Click);
+            this.newProfile.Click += new System.EventHandler(this.NewProfile_Click);
             // 
             // profileList
             // 
@@ -229,7 +229,7 @@
             this.profileList.Name = "profileList";
             this.profileList.Size = new System.Drawing.Size(108, 21);
             this.profileList.TabIndex = 12;
-            this.profileList.SelectedIndexChanged += new System.EventHandler(this.profileList_SelectedIndexChanged);
+            this.profileList.SelectedIndexChanged += new System.EventHandler(this.ProfileList_SelectedIndexChanged);
             // 
             // icon
             // 
@@ -253,14 +253,14 @@
             this.start_stop.Name = "start_stop";
             this.start_stop.Size = new System.Drawing.Size(174, 22);
             this.start_stop.Text = this.enableWatch.Text;
-            this.start_stop.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
+            this.start_stop.Click += new System.EventHandler(this.ToolStripMenuItem1_Click);
             // 
             // close
             // 
             this.close.Name = "close";
             this.close.Size = new System.Drawing.Size(174, 22);
             this.close.Text = "Close Octowatcher";
-            this.close.Click += new System.EventHandler(this.toolStripMenuItem2_Click);
+            this.close.Click += new System.EventHandler(this.ToolStripMenuItem2_Click);
             // 
             // toolStripSeparator1
             // 
@@ -273,7 +273,7 @@
             this.startMinimized.Name = "startMinimized";
             this.startMinimized.Size = new System.Drawing.Size(174, 22);
             this.startMinimized.Text = "Start minimized";
-            this.startMinimized.Click += new System.EventHandler(this.toolStripMenuItem1_Click_1);
+            this.startMinimized.Click += new System.EventHandler(this.ToolStripMenuItem1_Click_1);
             // 
             // mainForm
             // 
@@ -298,10 +298,10 @@
             this.Controls.Add(this.watchFolder);
             this.Controls.Add(this.label1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "mainForm";
+            this.Name = "MainForm";
             this.RightToLeftLayout = true;
             this.Text = "OctoWatcher";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.mainForm_FormClosing);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.menuicono.ResumeLayout(false);
