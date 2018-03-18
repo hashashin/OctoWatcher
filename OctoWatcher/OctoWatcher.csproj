@@ -146,6 +146,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="octo.ico" />
+    <None Include="Resources\63053-200.png" />
+    <None Include="Resources\close-button-icon-30064.png" />
+    <None Include="Resources\293a5289d4fb9d7440f4c9151508f0d0_icon2.png" />
+    <None Include="Resources\293a5289d4fb9d7440f4c9151508f0d0_icon.png" />
     <None Include="Resources\tooltipicon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -52,9 +52,9 @@
             this.icon = new System.Windows.Forms.NotifyIcon(this.components);
             this.menuicono = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.start_stop = new System.Windows.Forms.ToolStripMenuItem();
-            this.close = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.startMinimized = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.close = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.menuicono.SuspendLayout();
             this.SuspendLayout();
@@ -246,36 +246,39 @@
             this.toolStripSeparator1,
             this.close});
             this.menuicono.Name = "menuicono";
-            this.menuicono.Size = new System.Drawing.Size(175, 98);
+            this.menuicono.Size = new System.Drawing.Size(175, 76);
             // 
             // start_stop
             // 
+            this.start_stop.Image = global::OctoWatcher.Properties.Resources._293a5289d4fb9d7440f4c9151508f0d0_icon;
             this.start_stop.Name = "start_stop";
             this.start_stop.Size = new System.Drawing.Size(174, 22);
             this.start_stop.Text = this.enableWatch.Text;
             this.start_stop.Click += new System.EventHandler(this.ToolStripMenuItem1_Click);
             // 
-            // close
+            // startMinimized
             // 
-            this.close.Name = "close";
-            this.close.Size = new System.Drawing.Size(174, 22);
-            this.close.Text = "Close Octowatcher";
-            this.close.Click += new System.EventHandler(this.ToolStripMenuItem2_Click);
+            this.startMinimized.CheckOnClick = true;
+            this.startMinimized.Image = global::OctoWatcher.Properties.Resources._63053_200;
+            this.startMinimized.Name = "startMinimized";
+            this.startMinimized.Size = new System.Drawing.Size(174, 22);
+            this.startMinimized.Text = "Start minimized";
+            this.startMinimized.Click += new System.EventHandler(this.ToolStripMenuItem1_Click_1);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(171, 6);
             // 
-            // startMinimized
+            // close
             // 
-            this.startMinimized.CheckOnClick = true;
-            this.startMinimized.Name = "startMinimized";
-            this.startMinimized.Size = new System.Drawing.Size(174, 22);
-            this.startMinimized.Text = "Start minimized";
-            this.startMinimized.Click += new System.EventHandler(this.ToolStripMenuItem1_Click_1);
+            this.close.Image = global::OctoWatcher.Properties.Resources.close_button_icon_30064;
+            this.close.Name = "close";
+            this.close.Size = new System.Drawing.Size(174, 22);
+            this.close.Text = "Close Octowatcher";
+            this.close.Click += new System.EventHandler(this.ToolStripMenuItem2_Click);
             // 
-            // mainForm
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -339,4 +342,3 @@
         private System.Windows.Forms.ToolStripMenuItem startMinimized;
     }
 }
-

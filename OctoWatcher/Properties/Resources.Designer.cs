@@ -61,6 +61,46 @@ namespace OctoWatcher.Properties {
         }
         
         /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _293a5289d4fb9d7440f4c9151508f0d0_icon {
+            get {
+                object obj = ResourceManager.GetObject("293a5289d4fb9d7440f4c9151508f0d0_icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _293a5289d4fb9d7440f4c9151508f0d0_icon2 {
+            get {
+                object obj = ResourceManager.GetObject("293a5289d4fb9d7440f4c9151508f0d0_icon2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _63053_200 {
+            get {
+                object obj = ResourceManager.GetObject("63053-200", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap close_button_icon_30064 {
+            get {
+                object obj = ResourceManager.GetObject("close-button-icon-30064", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Start Watching.
         /// </summary>
         internal static string mainForm_enableWatch_CheckedChanged_Start_Watching {

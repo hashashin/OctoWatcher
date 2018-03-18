@@ -8,7 +8,6 @@ using Temp.IO;
 using Gajatko.IniFiles;
 using OctoWatcher.Properties;
 
-
 namespace OctoWatcher
 {
     public partial class MainForm : Form
@@ -94,6 +93,7 @@ namespace OctoWatcher
                 _fsWatcher.EnableRaisingEvents = true;
                 statusLabel.Text = Resources.mainForm_enableWatch_CheckedChanged_Watching_Folder_for_files_;
                 enableWatch.Text = Resources.mainForm_enableWatch_CheckedChanged_Stop_Watching;
+                start_stop.Image = global::OctoWatcher.Properties.Resources._293a5289d4fb9d7440f4c9151508f0d0_icon2;
                 start_stop.Text = enableWatch.Text;
                 icon.BalloonTipText = Resources.mainForm_enableWatch_CheckedChanged_Watching_Folder_for_files_;
                 icon.ShowBalloonTip(100, "", icon.BalloonTipText, ToolTipIcon.Info);
@@ -103,6 +103,7 @@ namespace OctoWatcher
                 _fsWatcher.EnableRaisingEvents = false;
                 enableWatch.Text = Resources.mainForm_enableWatch_CheckedChanged_Start_Watching;
                 start_stop.Text = enableWatch.Text;
+                start_stop.Image = global::OctoWatcher.Properties.Resources._293a5289d4fb9d7440f4c9151508f0d0_icon;
                 statusLabel.Text = Resources.mainForm_enableWatch_CheckedChanged_Watching_disabled_;
                 icon.BalloonTipText = Resources.mainForm_enableWatch_CheckedChanged_Watching_disabled_;
                 icon.ShowBalloonTip(100,"", icon.BalloonTipText, ToolTipIcon.Info);
@@ -448,4 +449,3 @@ namespace OctoWatcher
         }
     }
 }
-
