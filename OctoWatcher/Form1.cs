@@ -113,8 +113,8 @@ namespace OctoWatcher
         private void MainForm_Resize(object sender, EventArgs e)
         {
             if (FormWindowState.Minimized != WindowState) return;
-            icon.BalloonTipText = Resources.mainForm_MainForm_Resize_Minimized_to_tray_;
-            icon.ShowBalloonTip(100, "", icon.BalloonTipText, ToolTipIcon.Info);
+            //icon.BalloonTipText = Resources.mainForm_MainForm_Resize_Minimized_to_tray_;
+            //icon.ShowBalloonTip(100, "", icon.BalloonTipText, ToolTipIcon.Info);
             Hide();
         }
 
