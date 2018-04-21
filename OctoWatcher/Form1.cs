@@ -13,6 +13,7 @@ namespace OctoWatcher
     public partial class MainForm : Form
     {
         private readonly MyFileSystemWatcher _fsWatcher = new MyFileSystemWatcher();
+        private readonly MyFileSystemWatcher _fsWatcherstl = new MyFileSystemWatcher();
 
         private readonly string _cfile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/octowatcher.ini";
 
@@ -91,6 +92,12 @@ namespace OctoWatcher
                 _fsWatcher.Changed += OnChanged;
                 _fsWatcher.IncludeSubdirectories = true;
                 _fsWatcher.EnableRaisingEvents = true;
+                _fsWatcherstl.Path = watchFolder.Text;
+                _fsWatcherstl.Filter = "*.stl"; // only watch for gcode
+                _fsWatcherstl.NotifyFilter = NotifyFilters.LastWrite;
+                _fsWatcherstl.Changed += OnChanged;
+                _fsWatcherstl.IncludeSubdirectories = true;
+                _fsWatcherstl.EnableRaisingEvents = true;
                 statusLabel.Text = Resources.mainForm_enableWatch_CheckedChanged_Watching_Folder_for_files_;
                 enableWatch.Text = Resources.mainForm_enableWatch_CheckedChanged_Stop_Watching;
                 start_stop.Image = global::OctoWatcher.Properties.Resources._293a5289d4fb9d7440f4c9151508f0d0_icon2;
@@ -101,6 +108,7 @@ namespace OctoWatcher
             else
             {
                 _fsWatcher.EnableRaisingEvents = false;
+                _fsWatcherstl.EnableRaisingEvents = false;
                 enableWatch.Text = Resources.mainForm_enableWatch_CheckedChanged_Start_Watching;
                 start_stop.Text = enableWatch.Text;
                 start_stop.Image = global::OctoWatcher.Properties.Resources._293a5289d4fb9d7440f4c9151508f0d0_icon;
@@ -172,6 +180,15 @@ namespace OctoWatcher
                 return;
             }
 
+            if (e.Name.Contains(".stl"))
+            {
+                icon.BalloonTipText = Resources.MainForm_OnChanged_New_stl_file_detected__uploading__ + e.Name;
+                icon.ShowBalloonTip(100, "", icon.BalloonTipText, ToolTipIcon.Info);
+                Do_upload(e.FullPath);
+                File.Delete(e.FullPath);
+                _lastName = "done";
+                return;
+            }
             _lastName = e.Name;
             //fsWatcher.EnableRaisingEvents = false;
             icon.BalloonTipText = Resources.MainForm_OnChanged_New_file_detected__Preprocessing__ + e.Name;
@@ -203,7 +220,7 @@ namespace OctoWatcher
 
             string uploadName = Path.GetFileName(filename); // need to get just the filename portion
             string uploadedFileStatus = "Uploaded " + uploadName;
-            if (localUpload.Checked)
+            if (localUpload.Checked || filename.Contains(".stl"))
             {
                 url = url + "local";
             }
@@ -213,7 +230,7 @@ namespace OctoWatcher
             }
 
             // process filename here.
-            if (enableKeywords.Checked)
+            if (enableKeywords.Checked &! filename.Contains(".stl"))
             {
                 if (uploadName != null && uploadName.Contains("-select.gco"))
                 {

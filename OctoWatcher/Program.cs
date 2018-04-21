@@ -1,12 +1,17 @@
 ﻿using System;
+using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
 using OctoWatcher.Properties;
 
 namespace OctoWatcher
 {
-    static class Program
+    internal static class Program
     {
+        private const string Caption = "Octowatcher";
+        private const MessageBoxButtons Button = MessageBoxButtons.OK;
+        private const MessageBoxIcon Icon = MessageBoxIcon.Warning;
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -23,7 +28,7 @@ namespace OctoWatcher
             }
             else
             {
-                MessageBox.Show(Resources.Program_Main_only_one_instance_at_a_time);
+                MessageBox.Show(Resources.Program_Main_only_one_instance_at_a_time, Caption, Button, Icon);
             }
         }
     }

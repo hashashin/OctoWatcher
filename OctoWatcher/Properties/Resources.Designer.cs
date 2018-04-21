@@ -173,6 +173,15 @@ namespace OctoWatcher.Properties {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a New stl file detected, uploading: .
+        /// </summary>
+        internal static string MainForm_OnChanged_New_stl_file_detected__uploading__ {
+            get {
+                return ResourceManager.GetString("MainForm_OnChanged_New_stl_file_detected__uploading__", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Icon similar a (Icono).
         /// </summary>
         internal static System.Drawing.Icon octo {
