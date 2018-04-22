@@ -1,0 +1,4 @@
+language: csharp
+solution: OctoWatcher.sln
+script:
+  - xbuild /p:Configuration=Release OctoWatcher.sln
