@@ -1,4 +1,14 @@
 language: csharp
 solution: OctoWatcher.sln
+install:
+  - nuget restore OctoWatcher.sln
+  - nuget install NUnit.Runners -Version 3.8.0 -OutputDirectory testrunner
 script:
   - xbuild /p:Configuration=Release OctoWatcher.sln
+  - xvfb-run mono ./testrunner/NUnit.ConsoleRunner.3.8.0/tools/nunit3-console.exe ./OctoWatcherTests/bin/Release/OctoWatcherTests.dll
+notifications:
+  email: false
+  webhooks: https://ambrosio-tele.herokuapp.com/ambrosio/travisci/%23general
+  on_success: always # default: always
+  on_failure: always # default: always
+  on_start: always   # default: never
