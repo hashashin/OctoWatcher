@@ -55,6 +55,7 @@
             this.startMinimized = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.close = new System.Windows.Forms.ToolStripMenuItem();
+            this.layerInfo = new System.Windows.Forms.CheckBox();
             this.statusStrip1.SuspendLayout();
             this.menuicono.SuspendLayout();
             this.SuspendLayout();
@@ -147,7 +148,7 @@
             // 
             this.enableWatch.Appearance = System.Windows.Forms.Appearance.Button;
             this.enableWatch.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.enableWatch.Location = new System.Drawing.Point(12, 248);
+            this.enableWatch.Location = new System.Drawing.Point(12, 270);
             this.enableWatch.Name = "enableWatch";
             this.enableWatch.Size = new System.Drawing.Size(260, 49);
             this.enableWatch.TabIndex = 9;
@@ -170,7 +171,7 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 308);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 332);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(284, 22);
             this.statusStrip1.TabIndex = 11;
@@ -278,11 +279,22 @@
             this.close.Text = "Close Octowatcher";
             this.close.Click += new System.EventHandler(this.ToolStripMenuItem2_Click);
             // 
+            // layerInfo
+            // 
+            this.layerInfo.AutoSize = true;
+            this.layerInfo.Location = new System.Drawing.Point(12, 247);
+            this.layerInfo.Name = "layerInfo";
+            this.layerInfo.Size = new System.Drawing.Size(142, 17);
+            this.layerInfo.TabIndex = 17;
+            this.layerInfo.Text = "Add layer info with M117";
+            this.layerInfo.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 330);
+            this.ClientSize = new System.Drawing.Size(284, 354);
+            this.Controls.Add(this.layerInfo);
             this.Controls.Add(this.newProfile);
             this.Controls.Add(this.deleteProfile);
             this.Controls.Add(this.saveProfile);
@@ -340,5 +352,6 @@
         private System.Windows.Forms.ToolStripMenuItem close;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem startMinimized;
+        private System.Windows.Forms.CheckBox layerInfo;
     }
 }

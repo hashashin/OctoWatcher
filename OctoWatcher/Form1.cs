@@ -40,6 +40,7 @@ namespace OctoWatcher
                 config["Default"]["localUpload"] = "true";
                 config["Default"]["autoStart"] = "false";
                 config["Default"]["startMinimized"] = "false";
+                config["Default"]["layerInfo"] = "true";
                 config.Save(_cfile);
             }
 
@@ -193,7 +194,10 @@ namespace OctoWatcher
             //fsWatcher.EnableRaisingEvents = false;
             icon.BalloonTipText = Resources.MainForm_OnChanged_New_file_detected__Preprocessing__ + e.Name;
             icon.ShowBalloonTip(100, "", icon.BalloonTipText, ToolTipIcon.Info);
-            Run_insert(e.FullPath);
+            if (layerInfo.Checked)
+            {
+                Run_insert(e.FullPath);
+            }
             Run_analysis(e.FullPath);
             //icon.BalloonTipText = "Uploading: " + e.Name;
             //icon.ShowBalloonTip(100, "", icon.BalloonTipText, ToolTipIcon.Info);
@@ -312,6 +316,7 @@ namespace OctoWatcher
                 config[profileName]["localUpload"] = localUpload.Checked.ToString();
                 config[profileName]["autoStart"] = autoStart.Checked.ToString();
                 config[profileName]["startMinimized"] = startMinimized.Checked.ToString();
+                config[profileName]["layerInfo"] = layerInfo.Checked.ToString();
                 config.Save(_cfile);
 
                 IniFile.FromFile(_cfile);
@@ -338,6 +343,7 @@ namespace OctoWatcher
                 localUpload.Checked = Convert.ToBoolean(config[profileName]["localUpload"]);
                 autoStart.Checked = Convert.ToBoolean(config[profileName]["autoStart"]);
                 startMinimized.Checked = Convert.ToBoolean(config[profileName]["startMinimized"]);
+                layerInfo.Checked = Convert.ToBoolean(config[profileName]["layerInfo"]);
             }
             else
             {
@@ -350,6 +356,7 @@ namespace OctoWatcher
                 localUpload.Checked = Convert.ToBoolean(config[profileName]["localUpload"]);
                 autoStart.Checked = Convert.ToBoolean(config[profileName]["autoStart"]);
                 startMinimized.Checked = Convert.ToBoolean(config[profileName]["startMinimized"]);
+                layerInfo.Checked = Convert.ToBoolean(config[profileName]["layerInfo"]);
             }
 
         }
@@ -402,6 +409,8 @@ namespace OctoWatcher
             config[profileName]["enableKeywords"] = enableKeywords.Checked.ToString();
             config[profileName]["localUpload"] = localUpload.Checked.ToString();
             config[profileName]["autoStart"] = autoStart.Checked.ToString();
+            config[profileName]["startMinimized"] = startMinimized.Checked.ToString();
+            config[profileName]["layerInfo"] = layerInfo.Checked.ToString();
             config.Save(_cfile);
             IniFile.FromFile(_cfile);
             RefreshProfileList(profileName);
