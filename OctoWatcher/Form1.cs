@@ -138,7 +138,7 @@ namespace OctoWatcher
         {
             Process p = new Process
             {
-                StartInfo = new ProcessStartInfo(@"Q:\octoprint_post\analysis\venv\Scripts\analysis.exe",
+                StartInfo = new ProcessStartInfo(watchFolder.Text  + @"\analysis\venv\Scripts\analysis.exe",
                     "--speed-x=1000 --speed-y=1000 --max-t=10 " + "\"" + arg + "\"")
                 {
                     RedirectStandardOutput = true,
@@ -160,8 +160,8 @@ namespace OctoWatcher
         {
             Process p = new Process
             {
-                StartInfo = new ProcessStartInfo(@"Q:\octoprint_post\analysis\venv\Scripts\python.exe",
-                    "Q:\\octoprint_post\\analysis\\insert_m117.py \"" + eFullPath + "\"")
+                StartInfo = new ProcessStartInfo(watchFolder.Text + @"\analysis\venv\Scripts\insert_m117.exe",
+                    "\"" + eFullPath + "\"")
                 {
                     RedirectStandardOutput = true,
                     UseShellExecute = false,
