@@ -1,4 +1,6 @@
-﻿namespace OctoWatcher
+﻿using System.Windows.Forms;
+
+namespace OctoWatcher
 {
     partial class MainForm
     {
@@ -56,6 +58,8 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.close = new System.Windows.Forms.ToolStripMenuItem();
             this.layerInfo = new System.Windows.Forms.CheckBox();
+            this.status_button = new System.Windows.Forms.Button();
+            this.status_menu = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.menuicono.SuspendLayout();
             this.SuspendLayout();
@@ -150,7 +154,7 @@
             this.enableWatch.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.enableWatch.Location = new System.Drawing.Point(12, 270);
             this.enableWatch.Name = "enableWatch";
-            this.enableWatch.Size = new System.Drawing.Size(260, 49);
+            this.enableWatch.Size = new System.Drawing.Size(142, 49);
             this.enableWatch.TabIndex = 9;
             this.enableWatch.Text = "Start Watching";
             this.enableWatch.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -244,16 +248,17 @@
             this.menuicono.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.start_stop,
             this.startMinimized,
+            this.status_menu,
             this.toolStripSeparator1,
             this.close});
             this.menuicono.Name = "menuicono";
-            this.menuicono.Size = new System.Drawing.Size(175, 76);
+            this.menuicono.Size = new System.Drawing.Size(176, 98);
             // 
             // start_stop
             // 
             this.start_stop.Image = global::OctoWatcher.Properties.Resources._293a5289d4fb9d7440f4c9151508f0d0_icon;
             this.start_stop.Name = "start_stop";
-            this.start_stop.Size = new System.Drawing.Size(174, 22);
+            this.start_stop.Size = new System.Drawing.Size(180, 22);
             this.start_stop.Text = this.enableWatch.Text;
             this.start_stop.Click += new System.EventHandler(this.ToolStripMenuItem1_Click);
             // 
@@ -262,20 +267,19 @@
             this.startMinimized.CheckOnClick = true;
             this.startMinimized.Image = global::OctoWatcher.Properties.Resources._63053_200;
             this.startMinimized.Name = "startMinimized";
-            this.startMinimized.Size = new System.Drawing.Size(174, 22);
+            this.startMinimized.Size = new System.Drawing.Size(180, 22);
             this.startMinimized.Text = "Start minimized";
-            this.startMinimized.Click += new System.EventHandler(this.ToolStripMenuItem1_Click_1);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(171, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // close
             // 
             this.close.Image = global::OctoWatcher.Properties.Resources.close_button_icon_30064;
             this.close.Name = "close";
-            this.close.Size = new System.Drawing.Size(174, 22);
+            this.close.Size = new System.Drawing.Size(180, 22);
             this.close.Text = "Close Octowatcher";
             this.close.Click += new System.EventHandler(this.ToolStripMenuItem2_Click);
             // 
@@ -289,11 +293,29 @@
             this.layerInfo.Text = "Add layer info with M117";
             this.layerInfo.UseVisualStyleBackColor = true;
             // 
+            // status_button
+            // 
+            this.status_button.Location = new System.Drawing.Point(174, 270);
+            this.status_button.Name = "status_button";
+            this.status_button.Size = new System.Drawing.Size(98, 49);
+            this.status_button.TabIndex = 18;
+            this.status_button.Text = "Hide status";
+            this.status_button.UseVisualStyleBackColor = true;
+            this.status_button.Click += new System.EventHandler(this.status_button_Click);
+            // 
+            // status_menu
+            // 
+            this.status_menu.Name = "status_menu";
+            this.status_menu.Size = new System.Drawing.Size(180, 22);
+            this.status_menu.Text = "Hide printer status";
+            this.status_menu.Click += new System.EventHandler(this.status_menu_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 354);
+            this.Controls.Add(this.status_button);
             this.Controls.Add(this.layerInfo);
             this.Controls.Add(this.newProfile);
             this.Controls.Add(this.deleteProfile);
@@ -334,7 +356,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox octoPrintAddress;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox apiKey;
+        internal System.Windows.Forms.TextBox apiKey;
         private System.Windows.Forms.CheckBox enableKeywords;
         private System.Windows.Forms.CheckBox localUpload;
         private System.Windows.Forms.CheckBox enableWatch;
@@ -353,5 +375,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem startMinimized;
         private System.Windows.Forms.CheckBox layerInfo;
+        private ToolStripMenuItem status_menu;
+        private Button status_button;
     }
 }

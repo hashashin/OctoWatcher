@@ -1,8 +1,7 @@
-﻿using System;
-using System.Drawing;
+﻿using OctoWatcher.Properties;
+using System;
 using System.Threading;
 using System.Windows.Forms;
-using OctoWatcher.Properties;
 
 namespace OctoWatcher
 {
@@ -24,11 +23,34 @@ namespace OctoWatcher
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
+                //Application.Run(new MultiFormContext(new MainForm(), new Form2()));
                 Application.Run(new MainForm());
             }
             else
             {
                 MessageBox.Show(Resources.Program_Main_only_one_instance_at_a_time, Caption, Button, Icon);
+            }
+        }
+    }
+
+    public class MultiFormContext : ApplicationContext
+    {
+        private int openForms;
+        public MultiFormContext(params Form[] forms)
+        {
+            openForms = forms.Length;
+
+            foreach (var form in forms)
+            {
+                form.FormClosed += (s, args) =>
+                {
+                    //When we have closed the last of the "starting" forms, 
+                    //end the program.
+                    if (Interlocked.Decrement(ref openForms) == 0)
+                        ExitThread();
+                };
+
+                form.Show();
             }
         }
     }

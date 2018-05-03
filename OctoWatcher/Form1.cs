@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.Net;
 using System.IO;
+using System.Security.Policy;
 using Temp.IO;
 using Gajatko.IniFiles;
 using OctoWatcher.Properties;
@@ -15,16 +16,23 @@ namespace OctoWatcher
         private readonly MyFileSystemWatcher _fsWatcher = new MyFileSystemWatcher();
         private readonly MyFileSystemWatcher _fsWatcherstl = new MyFileSystemWatcher();
 
-        private readonly string _cfile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/octowatcher.ini";
+        private static readonly string _cfile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/octowatcher.ini";
 
         private string _lastName;
         //private DateTime lasTime;
+        //private readonly Form _form2 = new Form2();
+        private Form _form2;
+        internal static string url;
+        internal static string api;
 
         public MainForm()
         {
             InitializeComponent();
+            _form2 = new Form2();
+            _form2.Show();
             icon.DoubleClick += NotifyIcon1_MouseDoubleClick;
             Resize += MainForm_Resize;
+
             IniFile config = new IniFile();
             if (File.Exists(_cfile))
             {
@@ -344,6 +352,8 @@ namespace OctoWatcher
                 autoStart.Checked = Convert.ToBoolean(config[profileName]["autoStart"]);
                 startMinimized.Checked = Convert.ToBoolean(config[profileName]["startMinimized"]);
                 layerInfo.Checked = Convert.ToBoolean(config[profileName]["layerInfo"]);
+                url = octoPrintAddress.Text;
+                api = apiKey.Text;
             }
             else
             {
@@ -466,12 +476,33 @@ namespace OctoWatcher
         private void ToolStripMenuItem2_Click(object sender, EventArgs e)
         {
             enableWatch.Checked = false;
-            Close();
+            this.Close();
         }
 
-        private void ToolStripMenuItem1_Click_1(object sender, EventArgs e)
+        private void printer_window()
         {
+            if (_form2.WindowState == FormWindowState.Normal)
+            {
+                status_button.Text = "Show status";
+                status_menu.Text = "Show printer status";
+                _form2.WindowState = FormWindowState.Minimized;
+            }
+            else if (_form2.WindowState == FormWindowState.Minimized)
+            {
+                status_button.Text = "Hide status";
+                status_menu.Text = "Hide printer status";
+                _form2.WindowState = FormWindowState.Normal;
+            }
+        }
 
+        private void status_menu_Click(object sender, EventArgs e)
+        {
+            printer_window();
+        }
+
+        private void status_button_Click(object sender, EventArgs e)
+        {
+            printer_window();
         }
     }
 }

@@ -66,6 +66,8 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="cPrinterProfilesTests.cs" />
+    <Compile Include="Form2Tests.cs" />
     <Compile Include="IniFileElementTests.cs" />
     <Compile Include="IniFileLightTests.cs" />
     <Compile Include="MainFormTests.cs" />
