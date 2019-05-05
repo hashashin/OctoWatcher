@@ -281,6 +281,7 @@ namespace OctoWatcher
 
             var nfile = webClient.Encoding.GetBytes(package);
 
+            ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
             webClient.UploadData(url, "POST", nfile);
             //fsWatcher.EnableRaisingEvents = true;
         }
