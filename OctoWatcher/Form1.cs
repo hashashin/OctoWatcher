@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.Configuration.Assemblies;
 using System.Diagnostics;
 using System.Windows.Forms;
 using System.Net;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using Temp.IO;
 using Gajatko.IniFiles;
 using OctoWatcher.Properties;
@@ -41,6 +44,9 @@ namespace OctoWatcher
                 config["Default"]["autoStart"] = "false";
                 config["Default"]["startMinimized"] = "false";
                 config["Default"]["layerInfo"] = "true";
+                config["Default"]["xspeed"] = "1000";
+                config["Default"]["yspeed"] = "1000";
+                config["Default"]["maxt"] = "10";
                 config.Save(_cfile);
             }
 
@@ -55,7 +61,16 @@ namespace OctoWatcher
             {
                 enableWatch.Checked = true;
             }
-        }
+
+            var assembly = Assembly.GetExecutingAssembly();
+            var fileVersionAttribute =
+                assembly.CustomAttributes.FirstOrDefault(ca =>
+                    ca.AttributeType == typeof(AssemblyFileVersionAttribute));
+            if (fileVersionAttribute != null && fileVersionAttribute.ConstructorArguments.Any()) { 
+
+                versiontext.Text = fileVersionAttribute.ConstructorArguments[0].ToString().Replace("\"", "");
+            }
+    }
 
         private void RefreshProfileList(string selectedProfile = "Default")
         {
@@ -136,10 +151,11 @@ namespace OctoWatcher
 
         private void Run_analysis(string arg)
         {
+            var t = "--speed-x=" + xspeed.Value + " --speed-y=" + yspeed.Value + " --max-t=" + maxt.Value;
             Process p = new Process
             {
                 StartInfo = new ProcessStartInfo(watchFolder.Text  + @"\analysis\venv\Scripts\analysis.exe",
-                    "--speed-x=1000 --speed-y=1000 --max-t=10 " + "\"" + arg + "\"")
+                    t + " \"" + arg + "\"")
                 {
                     RedirectStandardOutput = true,
                     UseShellExecute = false,
@@ -318,6 +334,9 @@ namespace OctoWatcher
                 config[profileName]["autoStart"] = autoStart.Checked.ToString();
                 config[profileName]["startMinimized"] = startMinimized.Checked.ToString();
                 config[profileName]["layerInfo"] = layerInfo.Checked.ToString();
+                config["Default"]["xspeed"] = xspeed.Value.ToString();
+                config["Default"]["yspeed"] = yspeed.Value.ToString();
+                config["Default"]["maxt"] = maxt.Value.ToString();
                 config.Save(_cfile);
 
                 IniFile.FromFile(_cfile);
@@ -345,6 +364,9 @@ namespace OctoWatcher
                 autoStart.Checked = Convert.ToBoolean(config[profileName]["autoStart"]);
                 startMinimized.Checked = Convert.ToBoolean(config[profileName]["startMinimized"]);
                 layerInfo.Checked = Convert.ToBoolean(config[profileName]["layerInfo"]);
+                xspeed.Value = Convert.ToDecimal(config[profileName]["xspeed"]);
+                yspeed.Value = Convert.ToDecimal(config[profileName]["yspeed"]);
+                maxt.Value = Convert.ToDecimal(config[profileName]["maxt"]);
             }
             else
             {
@@ -358,6 +380,9 @@ namespace OctoWatcher
                 autoStart.Checked = Convert.ToBoolean(config[profileName]["autoStart"]);
                 startMinimized.Checked = Convert.ToBoolean(config[profileName]["startMinimized"]);
                 layerInfo.Checked = Convert.ToBoolean(config[profileName]["layerInfo"]);
+                xspeed.Value = Convert.ToDecimal(config[profileName]["xspeed"]);
+                yspeed.Value = Convert.ToDecimal(config[profileName]["yspeed"]);
+                maxt.Value = Convert.ToDecimal(config[profileName]["maxt"]);
             }
 
         }
@@ -412,6 +437,9 @@ namespace OctoWatcher
             config[profileName]["autoStart"] = autoStart.Checked.ToString();
             config[profileName]["startMinimized"] = startMinimized.Checked.ToString();
             config[profileName]["layerInfo"] = layerInfo.Checked.ToString();
+            config[profileName]["xspeed"] = xspeed.Value.ToString();
+            config[profileName]["yspeed"] = yspeed.Value.ToString();
+            config[profileName]["maxt"] = maxt.Value.ToString();
             config.Save(_cfile);
             IniFile.FromFile(_cfile);
             RefreshProfileList(profileName);
